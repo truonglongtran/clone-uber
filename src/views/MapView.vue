@@ -6,31 +6,29 @@
 
 <script setup>
 import { onMounted } from "vue";
+import L from "leaflet";
 
 const initMap = () => {
-  if (!window.google || !window.google.maps) {
-    console.error("Google Maps API chưa được tải.");
-    return;
-  }
+  const map = L.map("map").setView([51.505, -0.09], 13);
 
-  const map = new window.google.maps.Map(document.getElementById("map"), {
-    center: { lat: -34.397, lng: 150.644 },
-    zoom: 8,
-  });
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
+
   console.log(map);
 };
 
 onMounted(() => {
   const script = document.createElement("script");
-  script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY`;
+  script.src = `https://cdn.jsdelivr.net/npm/leaflet/dist/leaflet.js`;
   script.async = true;
-  script.defer = true;
   script.onload = () => {
-    console.log("Google Maps API đã sẵn sàng.");
+    console.log("Leaflet đã sẵn sàng.");
     initMap();
   };
   script.onerror = () => {
-    console.error("Lỗi khi tải Google Maps API.");
+    console.error("Lỗi khi tải thư viện Leaflet.");
   };
   document.head.appendChild(script);
 });
